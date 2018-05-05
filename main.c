@@ -19,6 +19,7 @@ struct{
 }size;
 
 #include "player.h"
+#include "game.h"
 #include "eventHandlers.h"
 
 //function to handle redrawing
@@ -40,6 +41,14 @@ void on_draw(GtkWidget* widget, cairo_t* cr, gpointer data){
     cairo_translate(cr,w/2,h/2);
     cairo_scale(cr,1,-1);
 
+    dot* current = dots;
+    while (current->next){
+	cairo_set_source_rgb(cr, 1,0,0);
+	cairo_arc(cr,current->x, current->y, DOT_RADIUS, 0,2*M_PI);
+	cairo_fill(cr);
+	current = current->next;
+    }
+    
     cairo_set_source_rgb(cr,1,1,1);
 
     cairo_set_dash(cr,(double[]){14.0,6.0},2,1);
@@ -76,6 +85,9 @@ int main(int argc, char** argv){
     gtk_window_set_default_size(GTK_WINDOW(window),800,600);
     gtk_window_set_title(GTK_WINDOW(window), "Cricle Game");
 
+    init_dots();
+    add_dot(100,100,1,1000000);
+    
     toggle_animate(window,NULL);
     
     gtk_widget_show_all(window);

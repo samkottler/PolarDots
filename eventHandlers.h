@@ -61,7 +61,7 @@ gboolean animate(gpointer data){
 	    player_move_radial(dir);
 	if (key_down)
 	    player_move_radial(-dir);
-	//player_rotate(1);
+	update_dots();
 	gtk_widget_queue_draw(gtk_widget_get_toplevel(GTK_WIDGET(data)));
 	return TRUE;
     }
