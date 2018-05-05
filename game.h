@@ -21,20 +21,24 @@ void add_dot(double x, double y){
     new_dot->next = dots;
     dots = new_dot;
     int r = rand();
-    if (r<RAND_MAX/9*4){
+    if (r<RAND_MAX/19*8){
 	new_dot->points = 1;
 	new_dot->remaining_frames = 30*FPS;
     }
-    else if (r<RAND_MAX/9*6){
+    else if (r<RAND_MAX/19*12){
 	new_dot->points = 5;
 	new_dot->remaining_frames = 15*FPS;
     }
-    else if (r<RAND_MAX/9*8){
+    else if (r<RAND_MAX/19*16){
 	new_dot->points = -1;
 	new_dot->remaining_frames = 30*FPS;
     }
-    else{
+    else if (r<RAND_MAX/19*18){
 	new_dot->points = 25;
+	new_dot->remaining_frames = 15*FPS/2;
+    }
+    else{
+	new_dot->points = 0;
 	new_dot->remaining_frames = 15*FPS/2;
     }
     new_dot->x = x;
@@ -67,6 +71,8 @@ void update_dots(){
 	double dist = sqrt((x-current->x)*(x-current->x) + (y-current->y)*(y-current->y));
 	if (dist < DOT_RADIUS + player.dot_r){
 	    points += current->points;
+	    if(current->points == 0)
+		settings.frames_remaining += 30*FPS;
 	    remove_dot(current);
 	}
 	current = current->next;

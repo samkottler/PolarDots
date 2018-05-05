@@ -12,7 +12,7 @@
 struct{
     int animate;
     int frames_remaining;
-}settings={0, 60*FPS};
+}settings={0, 2*60*FPS};
 
 //size of drawing area so the solid knows how far to translate
 struct{
@@ -53,8 +53,10 @@ void on_draw(GtkWidget* widget, cairo_t* cr, gpointer data){
 		cairo_set_source_rgb(cr, 0,b,0);
 	    else if (current->points == 5)
 		cairo_set_source_rgb(cr, 0,b,b);
-	    else
+	    else if (current->points == 25)
 		cairo_set_source_rgb(cr, b,0,b);
+	    else
+		cairo_set_source_rgb(cr, b,b,b);
 	    cairo_arc(cr,current->x, current->y, DOT_RADIUS, 0,2*M_PI);
 	    cairo_fill(cr);
 	    current = current->next;
@@ -80,7 +82,7 @@ void on_draw(GtkWidget* widget, cairo_t* cr, gpointer data){
 	int sec = settings.frames_remaining/FPS;
 	int min = sec/60;
 	sec -= min*60;
-	sprintf(buf,"%d:%d",min,sec);
+	sprintf(buf,"%d:%2d",min,sec);
 	cairo_text_extents_t extents;
 	cairo_text_extents(cr,buf,&extents);
 	cairo_move_to(cr,w-extents.width-10,30);
