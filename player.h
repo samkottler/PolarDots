@@ -2,7 +2,7 @@ struct{
     double circle_t,circle_r;
     double dot_r;
     double speed; //pixels per second
-}player={0,100,5,20*M_PI};
+}player={0,100,5,50*M_PI};
 
 double player_get_x(){
     return cos(player.circle_t)*player.circle_r;

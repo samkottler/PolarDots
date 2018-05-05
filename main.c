@@ -57,6 +57,13 @@ void on_draw(GtkWidget* widget, cairo_t* cr, gpointer data){
     
     cairo_arc(cr,player_get_x(),player_get_y(),player.dot_r,0,2*M_PI);
     cairo_fill(cr);
+
+    char buf[50];
+    sprintf(buf,"Score: %d", points);
+    cairo_set_font_size(cr, 20);
+    cairo_scale(cr,1,-1);
+    cairo_translate(cr, -w/2+10, -h/2+20);
+    cairo_show_text(cr, buf);
 }
 
 void clean_and_quit(GtkWidget* widget, gpointer data){
@@ -86,7 +93,9 @@ int main(int argc, char** argv){
     gtk_window_set_title(GTK_WINDOW(window), "Cricle Game");
 
     init_dots();
-    add_dot(100,100,1,1000000);
+    for(int i = 0; i < 10; ++i){
+	add_dot((double)rand()/RAND_MAX*800-400, (double)rand()/RAND_MAX*600-300);
+    }
     
     toggle_animate(window,NULL);
     

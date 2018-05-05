@@ -15,13 +15,13 @@ void init_dots(){
     dots->next = dots->prev = 0;
 }
 
-void add_dot(double x, double y, int points, int length){
+void add_dot(double x, double y){
     dot* new_dot = (dot*) malloc(sizeof(dot));
     dots->prev = new_dot;
     new_dot->next = dots;
     dots = new_dot;
-    new_dot->points = points;
-    new_dot->remaining_frames = length;
+    new_dot->points = 1;
+    new_dot->remaining_frames = 10*FPS;
     new_dot->x = x;
     new_dot->y = y;
     new_dot->prev = 0;

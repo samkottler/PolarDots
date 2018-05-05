@@ -61,6 +61,9 @@ gboolean animate(gpointer data){
 	    player_move_radial(dir);
 	if (key_down)
 	    player_move_radial(-dir);
+	if(rand() < RAND_MAX/FPS){
+	    add_dot((double)rand()/RAND_MAX*size.w-size.w/2,(double)rand()/RAND_MAX*size.h-size.h/2);
+	}
 	update_dots();
 	gtk_widget_queue_draw(gtk_widget_get_toplevel(GTK_WIDGET(data)));
 	return TRUE;
