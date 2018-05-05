@@ -130,7 +130,7 @@ int main(int argc, char** argv){
 
     gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
     gtk_window_set_default_size(GTK_WINDOW(window),800,600);
-    gtk_window_set_title(GTK_WINDOW(window), "Cricle Game");
+    gtk_window_set_title(GTK_WINDOW(window), "Polar Dots");
 
     init_dots();
     for(int i = 0; i < 10; ++i){
