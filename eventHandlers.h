@@ -66,6 +66,8 @@ gboolean animate(gpointer data){
 	}
 	update_dots();
 	gtk_widget_queue_draw(gtk_widget_get_toplevel(GTK_WIDGET(data)));
+	if (settings.frames_remaining)
+	    --(settings.frames_remaining);
 	return TRUE;
     }
     else

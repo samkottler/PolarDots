@@ -21,7 +21,7 @@ void add_dot(double x, double y){
     new_dot->next = dots;
     dots = new_dot;
     new_dot->points = 1;
-    new_dot->remaining_frames = 10*FPS;
+    new_dot->remaining_frames = 30*FPS;
     new_dot->x = x;
     new_dot->y = y;
     new_dot->prev = 0;
