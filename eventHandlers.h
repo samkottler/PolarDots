@@ -1,7 +1,67 @@
+int key_up = 0;
+int key_down = 0;
+int key_right = 0;
+int key_left = 0;
+
+gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data){
+    switch (event->keyval){
+    case GDK_KEY_Up:
+	if (!key_down)
+	    key_up = 1;
+	break;
+    case GDK_KEY_Down:
+	if (!key_up)
+	    key_down = 1;
+	break;
+    case GDK_KEY_Left:
+	if (!key_right)
+	    key_left = 1;
+	break;
+    case GDK_KEY_Right:
+	if (!key_left)
+	    key_right = 1;
+	break;
+    default:
+	return FALSE;
+    }
+    return FALSE;
+}
+
+gboolean on_key_release(GtkWidget *widget, GdkEventKey *event, gpointer data){
+    switch (event->keyval){
+    case GDK_KEY_Up:
+	key_up = 0;
+	break;
+    case GDK_KEY_Down:
+	key_down = 0;
+	break;
+    case GDK_KEY_Left:
+	key_left = 0;
+	break;
+    case GDK_KEY_Right:
+	key_right = 0;
+	break;
+    default:
+	return FALSE;
+    }
+    return FALSE;
+}
+
 //timeout function for animating
 gboolean animate(gpointer data){
     if (settings.animate){
-	player_rotate(M_PI/FPS/1);
+	double dir = 1;
+	if ((key_right || key_left) && (key_up || key_down))
+	    dir = 1.0/sqrt(2);
+	if (key_right)
+	    player_rotate(dir);
+	if (key_left)
+	    player_rotate(-dir);
+	if (key_up)
+	    player_move_radial(dir);
+	if (key_down)
+	    player_move_radial(-dir);
+	//player_rotate(1);
 	gtk_widget_queue_draw(gtk_widget_get_toplevel(GTK_WIDGET(data)));
 	return TRUE;
     }

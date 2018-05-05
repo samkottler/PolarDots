@@ -38,7 +38,8 @@ void on_draw(GtkWidget* widget, cairo_t* cr, gpointer data){
     cairo_fill(cr);
 
     cairo_translate(cr,w/2,h/2);
-
+    cairo_scale(cr,1,-1);
+    
     cairo_set_source_rgb(cr,1,1,1);
     cairo_arc(cr,player_get_x(),player_get_y(),player.dot_r,0,2*M_PI);
     cairo_fill(cr);
@@ -63,6 +64,8 @@ int main(int argc, char** argv){
     gtk_container_add(GTK_CONTAINER(window),stage);
     g_signal_connect(G_OBJECT(darea),"draw",G_CALLBACK(on_draw),NULL);
     g_signal_connect(G_OBJECT(window),"destroy",G_CALLBACK(clean_and_quit),NULL);
+    g_signal_connect(G_OBJECT(window),"key_press_event",G_CALLBACK(on_key_press),NULL);
+    g_signal_connect(G_OBJECT(window),"key_release_event",G_CALLBACK(on_key_release),NULL);
 
     gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
     gtk_window_set_default_size(GTK_WINDOW(window),800,600);
