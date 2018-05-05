@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <time.h>
 
 #define FPS 15
 
@@ -47,7 +48,7 @@ void on_draw(GtkWidget* widget, cairo_t* cr, gpointer data){
 	while (current->next){
 	    double b = (double)current->remaining_frames/FPS/30;
 	    b=b/4*3+0.25;
-	    if (current->points == -1)
+	    if (current->points == -50)
 		cairo_set_source_rgba(cr, 1,0,0,b);
 	    else if (current->points == 1)
 		cairo_set_source_rgba(cr, 0,1,0,b);
@@ -132,6 +133,7 @@ int main(int argc, char** argv){
     gtk_window_set_default_size(GTK_WINDOW(window),800,600);
     gtk_window_set_title(GTK_WINDOW(window), "Polar Dots");
 
+    srand(time(NULL));
     init_dots();
     for(int i = 0; i < 10; ++i){
 	add_dot((double)rand()/RAND_MAX*800-400, (double)rand()/RAND_MAX*600-300);
