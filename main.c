@@ -39,8 +39,13 @@ void on_draw(GtkWidget* widget, cairo_t* cr, gpointer data){
 
     cairo_translate(cr,w/2,h/2);
     cairo_scale(cr,1,-1);
-    
+
     cairo_set_source_rgb(cr,1,1,1);
+
+    cairo_set_dash(cr,(double[]){14.0,6.0},2,1);
+    cairo_arc(cr,0,0,player.circle_r, 0,2*M_PI);
+    cairo_stroke(cr);
+    
     cairo_arc(cr,player_get_x(),player_get_y(),player.dot_r,0,2*M_PI);
     cairo_fill(cr);
 }
