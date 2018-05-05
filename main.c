@@ -18,6 +18,7 @@ struct{
     double w,h;
 }size;
 
+#include "player.h"
 #include "eventHandlers.h"
 
 //function to handle redrawing
@@ -36,10 +37,11 @@ void on_draw(GtkWidget* widget, cairo_t* cr, gpointer data){
     cairo_rectangle(cr, 0, 0, w,h);
     cairo_fill(cr);
 
-    GdkPixbuf* pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, w,h);
-    
-    gdk_cairo_set_source_pixbuf(cr, pixbuf, 0,0);
-    cairo_paint(cr);
+    cairo_translate(cr,w/2,h/2);
+
+    cairo_set_source_rgb(cr,1,1,1);
+    cairo_arc(cr,player_get_x(),player_get_y(),player.dot_r,0,2*M_PI);
+    cairo_fill(cr);
 }
 
 void clean_and_quit(GtkWidget* widget, gpointer data){
@@ -63,11 +65,10 @@ int main(int argc, char** argv){
     g_signal_connect(G_OBJECT(window),"destroy",G_CALLBACK(clean_and_quit),NULL);
 
     gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
-    gtk_window_set_default_size(GTK_WINDOW(window),800,400);
+    gtk_window_set_default_size(GTK_WINDOW(window),800,600);
     gtk_window_set_title(GTK_WINDOW(window), "Cricle Game");
 
     toggle_animate(window,NULL);
-    printf("%d\n", gtk_widget_get_scale_factor(window));
     
     gtk_widget_show_all(window);
     gtk_main();

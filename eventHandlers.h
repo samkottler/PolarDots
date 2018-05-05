@@ -1,6 +1,7 @@
 //timeout function for animating
 gboolean animate(gpointer data){
     if (settings.animate){
+	player_rotate(M_PI/FPS/1);
 	gtk_widget_queue_draw(gtk_widget_get_toplevel(GTK_WIDGET(data)));
 	return TRUE;
     }
