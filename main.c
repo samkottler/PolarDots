@@ -46,7 +46,15 @@ void on_draw(GtkWidget* widget, cairo_t* cr, gpointer data){
 	dot* current = dots;
 	while (current->next){
 	    double b = (double)current->remaining_frames/FPS/30;
-	    cairo_set_source_rgb(cr, b,0,0);
+	    b=b/4*3+0.25;
+	    if (current->points == -1)
+		cairo_set_source_rgb(cr, b,0,0);
+	    else if (current->points == 1)
+		cairo_set_source_rgb(cr, 0,b,0);
+	    else if (current->points == 5)
+		cairo_set_source_rgb(cr, 0,b,b);
+	    else
+		cairo_set_source_rgb(cr, b,0,b);
 	    cairo_arc(cr,current->x, current->y, DOT_RADIUS, 0,2*M_PI);
 	    cairo_fill(cr);
 	    current = current->next;
@@ -124,7 +132,7 @@ int main(int argc, char** argv){
     init_dots();
     for(int i = 0; i < 10; ++i){
 	add_dot((double)rand()/RAND_MAX*800-400, (double)rand()/RAND_MAX*600-300);
-	dots->remaining_frames = (int)((double)rand()/RAND_MAX*300);
+	dots->remaining_frames = (int)((double)rand()/RAND_MAX*(dots->remaining_frames));
     }
     
     toggle_animate(window,NULL);

@@ -20,8 +20,23 @@ void add_dot(double x, double y){
     dots->prev = new_dot;
     new_dot->next = dots;
     dots = new_dot;
-    new_dot->points = 1;
-    new_dot->remaining_frames = 30*FPS;
+    int r = rand();
+    if (r<RAND_MAX/9*4){
+	new_dot->points = 1;
+	new_dot->remaining_frames = 30*FPS;
+    }
+    else if (r<RAND_MAX/9*6){
+	new_dot->points = 5;
+	new_dot->remaining_frames = 15*FPS;
+    }
+    else if (r<RAND_MAX/9*8){
+	new_dot->points = -1;
+	new_dot->remaining_frames = 30*FPS;
+    }
+    else{
+	new_dot->points = 25;
+	new_dot->remaining_frames = 15*FPS/2;
+    }
     new_dot->x = x;
     new_dot->y = y;
     new_dot->prev = 0;
