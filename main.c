@@ -12,7 +12,7 @@
 struct{
     int animate;
     int frames_remaining;
-}settings={0, 2*60*FPS};
+}settings={0, 10*FPS};
 
 //size of drawing area so the solid knows how far to translate
 struct{
@@ -89,6 +89,7 @@ void on_draw(GtkWidget* widget, cairo_t* cr, gpointer data){
 	cairo_show_text(cr,buf);
     }
     else{
+	settings.animate = 0;
 	cairo_set_source_rgb(cr,1,1,1);
 	char buf[50];
 	sprintf(buf,"Game Over");
