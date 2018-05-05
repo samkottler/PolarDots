@@ -12,8 +12,9 @@
 
 struct{
     int animate;
+    int running;
     int frames_remaining;
-}settings={0, 60*FPS};
+}settings={0, 0, 60*FPS};
 
 //size of drawing area so the solid knows how far to translate
 struct{
@@ -22,6 +23,15 @@ struct{
 
 #include "player.h"
 #include "game.h"
+
+void start_game(){
+    settings.running = 1;
+    init_dots();
+    for(int i = 0; i < 10; ++i){
+	add_dot((double)rand()/RAND_MAX*800-400, (double)rand()/RAND_MAX*600-300);
+	dots->remaining_frames = (int)((double)rand()/RAND_MAX*(dots->remaining_frames));
+    }
+}
 #include "eventHandlers.h"
 
 //function to handle redrawing
@@ -40,7 +50,7 @@ void on_draw(GtkWidget* widget, cairo_t* cr, gpointer data){
     cairo_rectangle(cr, 0, 0, w,h);
     cairo_fill(cr);
 
-    if (settings.frames_remaining){
+    if (settings.running){
 	cairo_translate(cr,w/2,h/2);
 	cairo_scale(cr,1,-1);
 	
@@ -90,20 +100,33 @@ void on_draw(GtkWidget* widget, cairo_t* cr, gpointer data){
 	cairo_show_text(cr,buf);
     }
     else{
-	settings.animate = 0;
-	cairo_set_source_rgb(cr,1,1,1);
-	char buf[50];
-	sprintf(buf,"Game Over");
-	cairo_set_font_size(cr, 40);
-	cairo_text_extents_t extents;
-	cairo_text_extents(cr,buf,&extents);
-	cairo_move_to(cr,w/2-extents.width/2, h*3/8);
-	cairo_show_text(cr, buf);
-
-	sprintf(buf,"Score: %d", points);
-	cairo_text_extents(cr,buf,&extents);
-	cairo_move_to(cr,w/2-extents.width/2, h*3/8+extents.height*1.2);
-	cairo_show_text(cr,buf);
+	if (settings.frames_remaining == 0){
+	    settings.animate = 0;
+	    cairo_set_source_rgb(cr,1,1,1);
+	    char buf[50];
+	    sprintf(buf,"Game Over");
+	    cairo_set_font_size(cr, 40);
+	    cairo_text_extents_t extents;
+	    cairo_text_extents(cr,buf,&extents);
+	    cairo_move_to(cr,w/2-extents.width/2, h*3/8);
+	    cairo_show_text(cr, buf);
+	    
+	    sprintf(buf,"Score: %d", points);
+	    cairo_text_extents(cr,buf,&extents);
+	    cairo_move_to(cr,w/2-extents.width/2, h*3/8+extents.height*1.2);
+	    cairo_show_text(cr,buf);
+	}
+	else{
+	    cairo_set_font_size(cr, 40);
+	    cairo_text_extents_t extents;
+	    cairo_text_extents(cr,"Start",&extents);
+	    cairo_set_source_rgb(cr, 0, 1, 1);
+	    cairo_rectangle(cr, w/2-extents.width/2-5, h/2-extents.height/2-10, extents.width+10,extents.height+10);
+	    cairo_fill(cr);
+	    cairo_set_source_rgb(cr,0,0,0);
+	    cairo_move_to(cr,w/2-extents.width/2,h/2+extents.height/4);
+	    cairo_show_text(cr,"Start");
+	}
     }
 }
 
@@ -128,18 +151,14 @@ int main(int argc, char** argv){
     g_signal_connect(G_OBJECT(window),"destroy",G_CALLBACK(clean_and_quit),NULL);
     g_signal_connect(G_OBJECT(window),"key_press_event",G_CALLBACK(on_key_press),NULL);
     g_signal_connect(G_OBJECT(window),"key_release_event",G_CALLBACK(on_key_release),NULL);
-
+    g_signal_connect(G_OBJECT(window),"button_press_event", G_CALLBACK(on_click), NULL);
+    
     gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
     gtk_window_set_default_size(GTK_WINDOW(window),800,600);
     gtk_window_set_title(GTK_WINDOW(window), "Polar Dots");
 
     srand(time(NULL));
-    init_dots();
-    for(int i = 0; i < 10; ++i){
-	add_dot((double)rand()/RAND_MAX*800-400, (double)rand()/RAND_MAX*600-300);
-	dots->remaining_frames = (int)((double)rand()/RAND_MAX*(dots->remaining_frames));
-    }
-    
+       
     toggle_animate(window,NULL);
     
     gtk_widget_show_all(window);
